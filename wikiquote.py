@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#Ensure urllib works for Python 2
 try:
     from urllib import quote
     from urllib2 import urlopen
@@ -8,15 +9,45 @@ except ImportError:
 import json
 import lxml.html
 
-
+# Register custom exceptions
 class NoSuchPageException(Exception):
     pass
-
 
 class DisambiguationPageException(Exception):
     pass
 
-W_URL = 'http://en.wikiquote.org/w/api.php'
+# Allow usage of other language versions
+lang = "en"
+languages = {"en":"English","pl":"Polish","it":"Italian","ru":"Russian",
+        "de":"German","cs":"Czech","pt":"Portuguese","es":"Spanish","fr":"French",
+        "sk":"Slovak","bs":"Bosnian","fa":"Persian","tr":"Turkish","uk":"Ukrainian",
+        "lt":"Lithuanian","he":"Hebrew","bg":"Bulgarian","sl":"Slovenian","eo":"Esperanto",
+        "ca":"Catalan","el":"Greek","nn":"Norwegian (Nynorsk)","id":"Indonesian","zh":"Chinese",
+        "hu":"Hungarian","hr":"Croatian","li":"Limburgish","hy":"Armenian","su":"Sundanese",
+        "nl":"Dutch","ko":"Korean","ja":"Japanese","th":"Thai","simple":"Simple English",
+        "sv":"Swedish","ur":"Urdu","te":"Telugu","fi":"Finnish","cy":"Welsh",
+        "ar":"Arabic","la":"Latin","no":"Norwegian (Bokmål)","ml":"Malayalam","gl":"Galician",
+        "et":"Estonian","az":"Azerbaijani","ku":"Kurdish","sr":"Serbian","kn":"Kannada",
+        "ta":"Tamil","eu":"Basque","ka":"Georgian","sa":"Sanskrit","ro":"Romanian",
+        "da":"Danish","is":"Icelandic","vi":"Vietnamese","sq":"Albanian","hi":"Hindi",
+        "be":"Belarusian","mr":"Marathi","br":"Breton","uz":"Uzbek","ast":"Asturian",
+        "ang":"Anglo-Saxon","af":"Afrikaans","lb":"Luxembourgish","gu":"Gujarati","zh-min-nan":"Min Nan",
+        "am":"Amharic","co":"Corsican","wo":"Wolof","ky":"Kirghiz","kk":"Kazakh",
+        "ga":"Irish","za":"Zhuang","als":"Alemannic","vo":"Volapük","tt":"Tatar",
+        "tk":"Turkmen","ug":"Uyghur","bm":"Bambara","cr":"Cree","kw":"Cornish",
+        "ks":"Kashmiri","na":"Nauruan","qu":"Quechua","nds":"Low Saxon","kr":"Kanuri"}
+
+def set_language(lang_string="en"):
+    if lang_string in languages:
+        global lang
+        lang = lang_string
+        global W_URL
+        W_URL = 'http://' + lang + '.wikiquote.org/w/api.php'
+    print "Language: " + languages[lang]
+    return
+
+
+W_URL = 'http://' + lang + '.wikiquote.org/w/api.php'
 SRCH_URL = W_URL + '?format=json&action=query&list=search&continue=&srsearch='
 PAGE_URL = W_URL + '?format=json&action=parse&prop=text|categories&page='
 MAINPAGE_URL = W_URL + '?format=json&action=parse&page=Main%20Page&prop=text'
