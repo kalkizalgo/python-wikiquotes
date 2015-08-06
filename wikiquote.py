@@ -41,16 +41,27 @@ def set_language(lang_string="en"):
     if lang_string in languages:
         global lang
         lang = lang_string
-        global W_URL
-        W_URL = 'http://' + lang + '.wikiquote.org/w/api.php'
+        update_urls()
     print "Language: " + languages[lang]
     return
 
-
+# Set url templates
 W_URL = 'http://' + lang + '.wikiquote.org/w/api.php'
 SRCH_URL = W_URL + '?format=json&action=query&list=search&continue=&srsearch='
 PAGE_URL = W_URL + '?format=json&action=parse&prop=text|categories&page='
 MAINPAGE_URL = W_URL + '?format=json&action=parse&page=Main%20Page&prop=text'
+
+def update_urls():
+    global W_URL
+    W_URL = 'http://' + lang + '.wikiquote.org/w/api.php'
+    global SRCH_URL
+    SRCH_URL = W_URL + '?format=json&action=query&list=search&continue=&srsearch='
+    global PAGE_URL
+    PAGE_URL = W_URL + '?format=json&action=parse&prop=text|categories&page='
+    global MAINPAGE_URL
+    MAINPAGE_URL = W_URL + '?format=json&action=parse&page=Main%20Page&prop=text'
+    return
+
 MIN_QUOTE_LEN = 6
 MIN_QUOTE_WORDS = 3
 DEFAULT_MAX_QUOTES = 20
